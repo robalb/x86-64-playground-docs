@@ -49,8 +49,8 @@ import flag2 from '../assets/flag_2_Crop2.png'
     <div class="logo">
       <picture>
         <source media="(max-width: 350px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
-        <source media="(min-width: 500px)" width="258" height="67" srcset={logo_large.src}/>
-        <img src={logo_small.src} width="67", height="67" alt="x86-64 Playground" />
+        <source media="(min-width: 500px)" width="258" height="67" srcset={logo_large.src} />
+        <img src={logo_small.src} width="67" height="67" alt="x86-64 Playground" fetchpriority="high" />
       </picture>
     </div>
 
@@ -72,7 +72,7 @@ import flag2 from '../assets/flag_2_Crop2.png'
 
 <section class="hero">
 
-  <Image class="hero" src={art1} alt="Logo art" aria-hidden="true" fetchpriority="high" />
+  <Image class="hero" src={art1} alt="Logo art" aria-hidden="true" fetchpriority="high" loading="eager" />
   <h1>x86-64 Playground</h1>
   <h2>An online assembly editor and GDB-like debugger</h2>
 
