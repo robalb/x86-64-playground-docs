@@ -1,0 +1,55 @@
+#
+# This workflow requires writing permissions to the repository.
+# The GITHUB_TOKEN provided by the runner defaults to read-only permissions.
+# Remember to add write permissions in `Settings -> Action -> General -> Workflow permissions`
+
+# TODO: use the official github pages workflow.
+# We are currently pushing build artifacts to a branch, which is stupid.
+# https://github.com/actions/upload-pages-artifact
+name: Update GitHub Pages
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.11.1'  # TODO: nix! reproducible builds! & a sprinkle of professionalism
+
+    - name: Install dependencies and build the web project
+      working-directory: .
+      run: |
+        npm ci
+        npm run build
+
+    - name: Upload static files as artifact
+      id: deployment
+      uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+      with:
+        path: ./dist/
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
